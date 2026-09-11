@@ -1,0 +1,70 @@
+{
+  "checks": [
+    {
+      "name": "All non-mantle meshes byte-identical to M03 baseline",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "Nodes/hierarchy unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Animations unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Materials unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Texture image bytes unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Mantle uses 2 local primitives: gold trim + cloth",
+      "passed": true,
+      "detail": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "Coverage at Y=1.90 remains outside the shoulder",
+      "passed": true,
+      "detail": {
+        "shoulderMinX": -0.5149328489066818,
+        "M03MinX": -0.5321883136501618,
+        "M04MinX": -0.590504304069516,
+        "M03Outside": -0.017255464743480053,
+        "M04Outside": -0.07557145516283426
+      }
+    },
+    {
+      "name": "M04 did not reduce M03 coverage at Y=1.90",
+      "passed": true,
+      "detail": {
+        "shoulderMinX": -0.5149328489066818,
+        "M03MinX": -0.5321883136501618,
+        "M04MinX": -0.590504304069516,
+        "M03Outside": -0.017255464743480053,
+        "M04Outside": -0.07557145516283426
+      }
+    },
+    {
+      "name": "Preview and delivered GLB exist",
+      "passed": true,
+      "detail": {
+        "previewBytes": 12081358,
+        "glbBytes": 8408324
+      }
+    }
+  ],
+  "passed": 9,
+  "failed": 0,
+  "modelSHA256": "1fc1da387de71cb674660e71549d6bb0d575bb697710277e403891f5fdac1b9e"
+}
