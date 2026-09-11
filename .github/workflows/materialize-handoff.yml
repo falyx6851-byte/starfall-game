@@ -1,0 +1,55 @@
+name: Materialize Starfall handoff
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/materialize-handoff.yml'
+      - 'bootstrap/source_bundle.part*'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Decode deterministic rebuild source
+        shell: bash
+        run: |
+          cat bootstrap/source_bundle.part* | base64 -d > /tmp/source.tar.xz
+          mkdir -p /tmp/source
+          tar -xJf /tmp/source.tar.xz -C /tmp/source
+          rm -rf rebuild_src
+          mv /tmp/source/github_rebuild_src rebuild_src
+
+      - name: Install exact build dependencies
+        run: python -m pip install "numpy==2.3.5" "scipy==1.17.0" "Pillow==12.3.0"
+
+      - name: Rebuild exact M03 and M04 artifacts
+        run: python rebuild_src/rebuild.py
+
+      - name: Install browser capture dependencies
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Capture actual WebGL evidence
+        run: python rebuild_src/capture.py
+
+      - name: Commit materialized handoff
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add baselines/M03 candidates/M04 evidence ASSET_HASHES.json rebuild_src
+          git commit -m "handoff: materialize M03 baseline and M04 candidate [skip ci]" || exit 0
+          git push
